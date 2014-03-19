@@ -14,3 +14,10 @@ include includes/all_header.jade
             label(for='prop2Input') Property2
             input.form-control#prop2Input(type='text', name='prop2Input')
           button.btn.btn-info(type='submit') Abfüllen
+
+      - if (locals.error)
+          h1.error RESULT
+          p #{locals.error}
+      - if (locals.success)
+          h1.success RESULT
+          p #{locals.success}

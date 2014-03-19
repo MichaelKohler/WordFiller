@@ -1,3 +1,11 @@
 footer p {
   text-align: center;
 }
+
+.success {
+    color: #468847;
+}
+
+.error {
+    color: #c9302c;
+}
