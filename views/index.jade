@@ -1,0 +1,16 @@
+include includes/all_header.jade
+  .well
+    h1 Create a document!
+    p It's awesome!
+
+  .row
+    .col-lg-12
+      form(id='propertyform', method='POST', action='/fillinDocument')
+        fieldset
+          .form-group#cg-property1
+            label(for='prop1Input') Property1
+            input.form-control#prop1Input(type='text', name='prop1Input')
+          .form-group#cg-property2
+            label(for='prop2Input') Property2
+            input.form-control#prop2Input(type='text', name='prop2Input')
+          button.btn.btn-info(type='submit') Abfüllen
