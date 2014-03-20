@@ -4,15 +4,12 @@ var fs = require('fs');
 var documentManager = require('../models/document_manager.js');
 var helper = require('../models/helper.js');
 
-var templatePath = 'test.docx';
-var zippedTemplatePath = 'test_temp.zip';
-var zippedFinalTemplatePath = 'test_new.zip';
-var finalDocumentPath = 'test_new.docx';
-
 exports.fillDocumentWithProperties = function (req, res) {
     var locals = { };
 
     // rename word document to zip
+    var templatePath = 'test.docx';
+    var zippedTemplatePath = 'test_temp.zip';
     fs.rename(templatePath, zippedTemplatePath, function(errorToZIP) {
         if (errorToZIP) {
             locals.error = errorToZIP.message;
@@ -20,7 +17,11 @@ exports.fillDocumentWithProperties = function (req, res) {
         }
         else {
             var tempFolder = helper.extractZip(zippedTemplatePath);
+
+            var finalDocumentPath = 'test_new.docx';
             documentManager.processDocument(finalDocumentPath);
+
+            var zippedFinalTemplatePath = 'test_new.zip';
             helper.rezipDocument(zippedFinalTemplatePath, tempFolder);
 
             // rename new zip file back to be a word document
