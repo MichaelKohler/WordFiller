@@ -1,68 +1,43 @@
 'use strict';
 
-var AdmZip = require('adm-zip');
 var fs = require('fs');
+var documentManager = require('../models/document_manager.js');
+var helper = require('../models/helper.js');
 
 var templatePath = 'test.docx';
-var tempFolder = '';
-var zipTemplatePath = '';
+var zippedTemplatePath = 'test_temp.zip';
+var zippedFinalTemplatePath = 'test_new.zip';
+var finalDocumentPath = 'test_new.docx';
 
 exports.fillDocumentWithProperties = function (req, res) {
     var locals = { };
 
-    // TODO: refactor method with promises
-    // TODO: this would lead to better structure and not
-    // TODO: so long method
-
     // rename word document to zip
-    zipTemplatePath = templatePath.replace('.docx', '.zip')
-    fs.rename(templatePath, zipTemplatePath, function(errorToZIP) {
+    fs.rename(templatePath, zippedTemplatePath, function(errorToZIP) {
         if (errorToZIP) {
-            console.log(errorToZIP.message);
             locals.error = errorToZIP.message;
             res.render('index', locals);
         }
         else {
-            // create temp folder
-            tempFolder = 'foooo';  // TODO: create GUID
-            fs.mkdirSync(tempFolder);
+            var tempFolder = helper.extractZip(zippedTemplatePath);
+            documentManager.processDocument(finalDocumentPath);
+            helper.rezipDocument(zippedFinalTemplatePath, tempFolder);
 
-            // unzip document
-            var zip = new AdmZip('./test.zip');
-            zip.extractAllTo(tempFolder, true);
-            locals.success = 'SUCCESS!!';
-
-            // rename file back to word document
-            fs.rename(zipTemplatePath, templatePath, function(errorToWord) {
+            // rename new zip file back to be a word document
+            fs.rename(zippedFinalTemplatePath, finalDocumentPath, function(errorToWord) {
                 if (errorToWord) {
-                    console.log(errorToWord.message);
                     locals.error = errorToWord.message;
                 }
-                __cleanup();
+                else {
+                    locals.success = 'SUCCESS!!';
+                }
+
+                //helper.deleteFolderRecursive(tempFolder); // TODO: figure out file handling of archiver!!
+                fs.unlinkSync(zippedTemplatePath);
                 res.render('index', locals);
             });
         }
     });
-};
-
-var __cleanup = function() {
-    __deleteFolderRecursive(tempFolder);
-};
-
-// TODO: async?
-var __deleteFolderRecursive = function(path) {
-    if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach(function(file, index) {
-            var curPath = path + "/" + file;
-            if (fs.lstatSync(curPath).isDirectory()) {
-                __deleteFolderRecursive(curPath);
-            }
-            else {
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
 };
 
 exports.documentOverview = function (req, res) {

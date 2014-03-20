@@ -8,6 +8,7 @@
     "connect"             :  "2.8.*",
     "jade"                :  "0.34.*",
     "crypto"              :  "0.0.3",
-    "adm-zip"             :  "0.4.*"
+    "adm-zip"             :  "0.4.*",
+    "archiver"            :  "0.6.*"
   }
 }
