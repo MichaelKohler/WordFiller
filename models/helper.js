@@ -35,10 +35,18 @@ exports.rezipDocument = function(filepath, tempFolder) {
 
 exports.extractZip = function(filepath) {
     // create temp folder
-    var tempFolder = 'foooo';  // TODO: create GUID
+    var tempFolder = generateUUID();
     fs.mkdirSync(tempFolder);
     // unzip the zip to temp folder
     var zip = new AdmZip(filepath);
     zip.extractAllTo(tempFolder);
     return tempFolder;
 };
+
+var generateUUID = function() {
+    // from http://stackoverflow.com/a/2117523
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+}
