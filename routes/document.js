@@ -19,7 +19,7 @@ exports.fillDocumentWithProperties = function (req, res) {
             var tempFolder = helper.extractZip(zippedTemplatePath);
 
             var finalDocumentPath = 'test_new.docx';
-            documentManager.processDocument(finalDocumentPath);
+            documentManager.processDocument(tempFolder, finalDocumentPath);
 
             var zippedFinalTemplatePath = 'test_new.zip';
             helper.rezipDocument(zippedFinalTemplatePath, tempFolder);

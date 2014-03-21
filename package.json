@@ -9,6 +9,7 @@
     "jade"                :  "0.34.*",
     "crypto"              :  "0.0.3",
     "adm-zip"             :  "0.4.*",
-    "archiver"            :  "0.6.*"
+    "archiver"            :  "0.6.*",
+    "xml2js"              :  "0.4.*"
   }
 }
